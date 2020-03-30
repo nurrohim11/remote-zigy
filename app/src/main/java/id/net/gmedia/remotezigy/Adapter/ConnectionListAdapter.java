@@ -51,14 +51,14 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public CardView cvContainer;
+        public LinearLayout cvContainer;
         public LinearLayout llContainer;
         public TextView tvItem1, tvItem2;
 
         public MyViewHolder(View view) {
 
             super(view);
-            cvContainer = (CardView) view.findViewById(R.id.cv_container);
+            cvContainer = (LinearLayout) view.findViewById(R.id.cv_container);
             llContainer = (LinearLayout) view.findViewById(R.id.ll_container);
             tvItem1 = (TextView) view.findViewById(R.id.tv_item1);
             tvItem2 = (TextView) view.findViewById(R.id.tv_item2);

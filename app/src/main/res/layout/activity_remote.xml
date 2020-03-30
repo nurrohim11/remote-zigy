@@ -9,8 +9,8 @@
     tools:ignore="MissingConstraints"
     tools:context=".RemoteActivity">
 
-    <LinearLayout
-        android:id="@+id/ll_preview"
+    <id.net.gmedia.remotezigy.Utils.CustomVideoView
+        android:id="@+id/cv_preview"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_150sdp"
         android:background="@drawable/ppppp"
@@ -24,33 +24,35 @@
         android:src="@drawable/power"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_preview" />
+        app:layout_constraintTop_toBottomOf="@+id/cv_preview" />
 
     <LinearLayout
+        android:id="@+id/ll_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:id="@+id/ll_home"
+        android:layout_marginTop="@dimen/_6sdp"
         app:layout_constraintTop_toBottomOf="@+id/img_power">
 
         <ImageView
             android:id="@+id/img_home"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"
             android:layout_gravity="center"
+            android:layout_weight="0.4"
             android:src="@drawable/home" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"/>
+            android:layout_weight="0.4" />
+
         <ImageView
             android:id="@+id/img_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"
             android:layout_gravity="center"
+            android:layout_weight="0.4"
             android:src="@drawable/back" />
     </LinearLayout>
 
@@ -69,6 +71,7 @@
         android:layout_height="@dimen/_175sdp"
         android:foregroundGravity="center"
         android:src="@drawable/lingkaran"
+        android:layout_marginTop="@dimen/_6sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ll_home" />
@@ -145,6 +148,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_6sdp"
         app:layout_constraintTop_toBottomOf="@+id/img_lingkaran">
 
         <ImageView
@@ -169,5 +173,59 @@
             android:src="@drawable/crusor" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ll_volume"
+        android:layout_width="@dimen/_175sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:background="@drawable/bg_volume"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_menu">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:layout_gravity="center"
+            android:id="@+id/rl_minus"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/img_minus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:foregroundGravity="center"
+                android:layout_centerInParent="true"
+                android:src="@drawable/min" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:textColor="#fff"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/_12sdp"
+            android:text="VOLUME"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:layout_gravity="center"
+            android:id="@+id/rl_plus"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/img_plus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/plush" />
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

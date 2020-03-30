@@ -1,6 +1,7 @@
 package id.net.gmedia.remotezigy;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private List<CustomItem> masterList = new ArrayList<>();
     private ItemValidation iv = new ItemValidation();
     private static final String REQUEST_CONNECT_CLIENT = "request-connect-client";
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,12 +58,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     private void initUI() {
 
         rvListConnection = (RecyclerView) findViewById(R.id.rv_list_connection);
 
         setListConnection(masterList);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
     }
 
@@ -75,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
 
             final RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(MainActivity.this, 1);
             rvListConnection.setLayoutManager(mLayoutManager);
-//        rvListMenu.addItemDecoration(new NavMenu.GridSpacingItemDecoration(2, dpToPx(10), true));
             rvListConnection.setItemAnimator(new DefaultItemAnimator());
             rvListConnection.setAdapter(menuAdapter);
         }
@@ -392,4 +394,5 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
+
 }
