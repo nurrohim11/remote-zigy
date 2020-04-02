@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -101,7 +102,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
         holder.llContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show();
                 try {
                     connectToHost(cli);
                 }catch (Exception e){

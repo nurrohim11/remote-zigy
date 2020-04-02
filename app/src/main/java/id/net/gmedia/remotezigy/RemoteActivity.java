@@ -40,6 +40,7 @@ public class RemoteActivity extends AppCompatActivity {
     private static CustomVideoView cvPreview;
     RelativeLayout rlOk, rlMinus, rlPlus;
     ImageView imgPower, imgHome, imgBack, imgTop, imgBottom, imgPrev, imgNext, imgMenu, imgCursor;
+    RelativeLayout rlHome, rlBack, rlUp, rlDown, rlLeft, rlRight;
     private ItemValidation iv = new ItemValidation();
     private InetAddress hostAddress;
     private int hostPort;
@@ -63,22 +64,27 @@ public class RemoteActivity extends AppCompatActivity {
         imgPower.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                link_tv ="";
                 connectToHost("26");
             }
         });
 
         imgHome = findViewById(R.id.img_home);
-        imgHome.setOnClickListener(new View.OnClickListener() {
+        rlHome = findViewById(R.id.rl_home);
+        rlHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                link_tv ="";
                 connectToHost("3");
             }
         });
 
         imgBack = findViewById(R.id.img_back);
-        imgBack.setOnClickListener(new View.OnClickListener() {
+        rlBack = findViewById(R.id.rl_back);
+        rlBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                link_tv ="";
                 connectToHost("4");
             }
         });
@@ -92,7 +98,8 @@ public class RemoteActivity extends AppCompatActivity {
         });
 
         imgTop = findViewById(R.id.img_top);
-        imgTop.setOnClickListener(new View.OnClickListener() {
+        rlUp = findViewById(R.id.rl_up);
+        rlUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 connectToHost("19");
@@ -100,7 +107,8 @@ public class RemoteActivity extends AppCompatActivity {
         });
 
         imgBottom = findViewById(R.id.img_bottom);
-        imgBottom.setOnClickListener(new View.OnClickListener() {
+        rlDown = findViewById(R.id.rl_down);
+        rlDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 connectToHost("20");
@@ -108,7 +116,8 @@ public class RemoteActivity extends AppCompatActivity {
         });
 
         imgPrev = findViewById(R.id.img_prev);
-        imgPrev.setOnClickListener(new View.OnClickListener() {
+        rlLeft = findViewById(R.id.rl_left);
+        rlLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 connectToHost("21");
@@ -116,43 +125,44 @@ public class RemoteActivity extends AppCompatActivity {
         });
 
         imgNext = findViewById(R.id.img_next);
-        imgNext.setOnClickListener(new View.OnClickListener() {
+        rlRight = findViewById(R.id.rl_right);
+        rlRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 connectToHost("22");
             }
         });
 
-        imgMenu = findViewById(R.id.img_menu);
-        imgMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(RemoteActivity.this, "Menu", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        imgMenu = findViewById(R.id.img_menu);
+//        imgMenu.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(RemoteActivity.this, "Menu", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        imgCursor = findViewById(R.id.img_cursor);
+//        imgCursor.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(RemoteActivity.this, "Cursor", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
-        imgCursor = findViewById(R.id.img_cursor);
-        imgCursor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(RemoteActivity.this, "Cursor", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        rlMinus = findViewById(R.id.rl_minus);
-        rlMinus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                connectToHost("25");
-            }
-        });
-        rlPlus = findViewById(R.id.rl_plus);
-        rlPlus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                connectToHost("24");
-            }
-        });
+//        rlMinus = findViewById(R.id.rl_minus);
+//        rlMinus.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                connectToHost("25");
+//            }
+//        });
+//        rlPlus = findViewById(R.id.rl_plus);
+//        rlPlus.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                connectToHost("24");
+//            }
+//        });
     }
 
     private void connectToHost(String keyCode) {
@@ -182,6 +192,8 @@ public class RemoteActivity extends AppCompatActivity {
             Log.e(TAG, "can't put request");
             return;
         }
+        if(!link_tv.equals(""))
+            playVideo(RemoteActivity.this, link_tv);
 
         new SocketServerTask().execute(jsonData);
     }
@@ -251,6 +263,10 @@ public class RemoteActivity extends AppCompatActivity {
                             success = true;
                             link_tv = jsonObject.getString("link");
                             Log.d(">>>>>",link_tv);
+//                            if(!link_tv.equals("")){
+//                                playVideo(RemoteActivity.this, link_tv);
+//                                Toast.makeText(RemoteActivity.this, link_tv, Toast.LENGTH_SHORT).show();
+//                            }
                         }else{
                             success = false;
                         }
@@ -454,9 +470,6 @@ public class RemoteActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(!link_tv.equals("")){
-            playVideo(RemoteActivity.this, link_tv);
-        }
     }
 
     private void playVideo(final Context context, final String link_tv){
@@ -468,86 +481,83 @@ public class RemoteActivity extends AppCompatActivity {
 
         pbLoading.setVisibility(View.VISIBLE);
 
-        if(false){
-
-        }else{
-            cvPreview.setVisibility(View.VISIBLE);
-            if (Looper.myLooper() == null)
-            {
-                Looper.prepare();
-            }
-            new Thread(new Runnable() {
-                public void run() {
-
-                    ((Activity)context).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            try {
-
-                                cvPreview.stopPlayback();
-                                cvPreview.clearAnimation();
-                                cvPreview.suspend();
-                                cvPreview.setVideoURI(null);
-
-                                Uri uri = Uri.parse(link_tv);
-                                // savedChanel.saveLastChanel(nama, url);
-                                cvPreview.setVideoURI(uri);
-                                //vvPlayVideo.setMediaController(mediaController);
-                                cvPreview.requestFocus();
-
-                            } catch (Exception e) {
-                                // NETWORK ERROR such as Timeout
-                                e.printStackTrace();
-
-                                pbLoading.setVisibility(View.GONE);
-                                cvPreview.stopPlayback();
-                                cvPreview.clearAnimation();
-                                cvPreview.suspend();
-                                cvPreview.setVideoURI(null);
-                                Toast.makeText(context, "Channel sudah tidak tersedia", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-                }
-            }).start();
-
-            cvPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-
-                    pbLoading.setVisibility(View.GONE);
-                    mp.start();
-
-                    fullScreenVideo(context, scaleVideo);
-                    mp.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
-
-                        @Override
-                        public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-
-                            mp.start();
-                            fullScreenVideo(context, scaleVideo);
-                        }
-                    });
-                }
-            });
-
-            cvPreview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-                @Override
-                public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
-
-                    pbLoading.setVisibility(View.GONE);
-                    cvPreview.stopPlayback();
-                    cvPreview.clearAnimation();
-                    cvPreview.suspend();
-                    cvPreview.setVideoURI(null);
-                    Toast.makeText(context, "Channel sudah tidak tersedia", Toast.LENGTH_LONG).show();
-                    return true;
-                }
-            });
-
+        cvPreview.setVisibility(View.VISIBLE);
+        if (Looper.myLooper() == null)
+        {
+            Looper.prepare();
         }
+        new Thread(new Runnable() {
+            public void run() {
+
+                ((Activity)context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        try {
+
+                            cvPreview.stopPlayback();
+                            cvPreview.clearAnimation();
+                            cvPreview.suspend();
+                            cvPreview.setVideoURI(null);
+
+                            Uri uri = Uri.parse(link_tv);
+//                            Uri uri = Uri.parse("http://stream3.zigy.net/hls/indosiar.m3u8");
+                            // savedChanel.saveLastChanel(nama, url);
+                            cvPreview.setVideoURI(uri);
+                            //vvPlayVideo.setMediaController(mediaController);
+                            cvPreview.requestFocus();
+
+                        } catch (Exception e) {
+                            // NETWORK ERROR such as Timeout
+                            e.printStackTrace();
+
+                            pbLoading.setVisibility(View.GONE);
+                            cvPreview.stopPlayback();
+                            cvPreview.clearAnimation();
+                            cvPreview.suspend();
+                            cvPreview.setVideoURI(null);
+                            Toast.makeText(context, "Channel sudah tidak tersedia", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+        }).start();
+
+        cvPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+
+                pbLoading.setVisibility(View.GONE);
+                mp.start();
+
+                fullScreenVideo(context, scaleVideo);
+                mp.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
+
+                    @Override
+                    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+
+                        mp.start();
+                        fullScreenVideo(context, scaleVideo);
+                    }
+                });
+            }
+        });
+
+        cvPreview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
+
+                pbLoading.setVisibility(View.GONE);
+                cvPreview.stopPlayback();
+                cvPreview.clearAnimation();
+                cvPreview.suspend();
+                cvPreview.setVideoURI(null);
+                Toast.makeText(context, "Channel sudah tidak tersedia", Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
+
     }
 
     private static void fullScreenVideo(Context context, double scale)

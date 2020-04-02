@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,26 +11,33 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_175sdp"
+        android:layout_height="@dimen/_200sdp"
         android:id="@+id/rl_preview"
+        android:layout_alignParentTop="true"
         android:orientation="horizontal">
 
         <id.net.gmedia.remotezigy.Utils.CustomVideoView
             android:id="@+id/cv_preview"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/ppppp"
-            android:orientation="horizontal"/>
+            android:layout_height="match_parent"/>
+
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:id="@+id/pb_loading"
             android:visibility="gone"/>
+
     </RelativeLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:layout_below="@+id/rl_preview"
+        android:layout_marginTop="@dimen/_22sdp"
         android:layout_height="wrap_content">
 
         <ImageView
@@ -45,34 +52,51 @@
         <LinearLayout
             android:id="@+id/ll_home"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_42sdp"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/_6sdp"
             app:layout_constraintTop_toBottomOf="@+id/img_power">
 
-            <ImageView
-                android:id="@+id/img_home"
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="0.4"
-                android:src="@drawable/home" />
+                android:id="@+id/rl_home">
+                <ImageView
+                    android:id="@+id/img_home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.4"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/home" />
+            </RelativeLayout>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.4" />
 
-            <ImageView
-                android:id="@+id/img_back"
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="0.4"
-                android:src="@drawable/back" />
+                android:id="@+id/rl_back">
+                <ImageView
+                    android:id="@+id/img_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.4"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/back" />
+            </RelativeLayout>
+
         </LinearLayout>
 
         <View
+            android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_5sdp"
             android:background="#000"
@@ -119,131 +143,165 @@
 
         </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/img_top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/top"
+        <RelativeLayout
+            android:id="@+id/rl_up"
+            android:layout_width="@dimen/_42sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
             app:layout_constraintBottom_toTopOf="@+id/rl_ok"
             app:layout_constraintEnd_toEndOf="@+id/img_lingkaran"
             app:layout_constraintStart_toStartOf="@+id/img_lingkaran"
-            app:layout_constraintTop_toTopOf="@+id/img_lingkaran" />
+            app:layout_constraintTop_toTopOf="@+id/img_lingkaran">
 
-        <ImageView
-            android:id="@+id/img_bottom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/bottom"
+            <ImageView
+                android:id="@+id/img_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/top" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_down"
+            android:layout_width="@dimen/_42sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
             app:layout_constraintBottom_toBottomOf="@+id/img_lingkaran"
             app:layout_constraintEnd_toEndOf="@+id/img_lingkaran"
             app:layout_constraintStart_toStartOf="@+id/img_lingkaran"
-            app:layout_constraintTop_toBottomOf="@+id/rl_ok" />
+            app:layout_constraintTop_toBottomOf="@+id/rl_ok">
+            <ImageView
+                android:id="@+id/img_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bottom"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/img_prev"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/prev"
+        <RelativeLayout
+            android:id="@+id/rl_left"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_42sdp"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
             app:layout_constraintBottom_toBottomOf="@+id/img_lingkaran"
             app:layout_constraintEnd_toStartOf="@+id/rl_ok"
             app:layout_constraintStart_toStartOf="@+id/img_lingkaran"
-            app:layout_constraintTop_toTopOf="@+id/img_lingkaran" />
+            app:layout_constraintTop_toTopOf="@+id/img_lingkaran">
+            <ImageView
+                android:id="@+id/img_prev"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/prev"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/img_next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/next"
+        <RelativeLayout
+            android:id="@+id/rl_right"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_42sdp"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
             app:layout_constraintBottom_toBottomOf="@+id/img_lingkaran"
             app:layout_constraintEnd_toEndOf="@+id/img_lingkaran"
             app:layout_constraintStart_toEndOf="@+id/rl_ok"
-            app:layout_constraintTop_toTopOf="@+id/img_lingkaran" />
-
-        <LinearLayout
-            android:id="@+id/ll_menu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/_6sdp"
-            app:layout_constraintTop_toBottomOf="@+id/img_lingkaran">
-
+            app:layout_constraintTop_toTopOf="@+id/img_lingkaran">
             <ImageView
-                android:id="@+id/img_menu"
+                android:id="@+id/img_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.4"
-                android:layout_gravity="center"
-                android:src="@drawable/menu" />
+                android:src="@drawable/next"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.4" />
+<!--        <LinearLayout-->
+<!--            android:id="@+id/ll_menu"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_marginTop="@dimen/_6sdp"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/img_lingkaran">-->
 
-            <ImageView
-                android:id="@+id/img_cursor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.4"
-                android:layout_gravity="center"
-                android:src="@drawable/crusor" />
-        </LinearLayout>
+<!--            <ImageView-->
+<!--                android:id="@+id/img_menu"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="0.4"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:src="@drawable/menu" />-->
 
-        <LinearLayout
-            android:id="@+id/ll_volume"
-            android:layout_width="@dimen/_175sdp"
-            android:layout_height="@dimen/_30sdp"
-            android:layout_marginTop="@dimen/_16sdp"
-            android:background="@drawable/bg_volume"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ll_menu">
+<!--            <ImageView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="0.4" />-->
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:layout_gravity="center"
-                android:id="@+id/rl_minus"
-                android:layout_weight="1">
-                <ImageView
-                    android:id="@+id/img_minus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:foregroundGravity="center"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/min" />
-            </RelativeLayout>
+<!--            <ImageView-->
+<!--                android:id="@+id/img_cursor"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="0.4"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:src="@drawable/crusor" />-->
+<!--        </LinearLayout>-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:textColor="#fff"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textSize="@dimen/_12sdp"
-                android:text="VOLUME"/>
+<!--        <LinearLayout-->
+<!--            android:id="@+id/ll_volume"-->
+<!--            android:layout_width="@dimen/_175sdp"-->
+<!--            android:layout_height="@dimen/_30sdp"-->
+<!--            android:layout_marginTop="@dimen/_16sdp"-->
+<!--            android:background="@drawable/bg_volume"-->
+<!--            android:orientation="horizontal"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/ll_menu">-->
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:layout_gravity="center"
-                android:id="@+id/rl_plus"
-                android:layout_weight="1">
-                <ImageView
-                    android:id="@+id/img_plus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/plush" />
-            </RelativeLayout>
+<!--            <RelativeLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@android:color/transparent"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:id="@+id/rl_minus"-->
+<!--                android:layout_weight="1">-->
+<!--                <ImageView-->
+<!--                    android:id="@+id/img_minus"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:foregroundGravity="center"-->
+<!--                    android:layout_centerInParent="true"-->
+<!--                    android:src="@drawable/min" />-->
+<!--            </RelativeLayout>-->
 
-        </LinearLayout>
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_weight="1"-->
+<!--                android:textColor="#fff"-->
+<!--                android:gravity="center"-->
+<!--                android:textStyle="bold"-->
+<!--                android:textSize="@dimen/_12sdp"-->
+<!--                android:text="VOLUME"/>-->
+
+<!--            <RelativeLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@android:color/transparent"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:id="@+id/rl_plus"-->
+<!--                android:layout_weight="1">-->
+<!--                <ImageView-->
+<!--                    android:id="@+id/img_plus"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_centerInParent="true"-->
+<!--                    android:src="@drawable/plush" />-->
+<!--            </RelativeLayout>-->
+
+<!--        </LinearLayout>-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</LinearLayout>
+</RelativeLayout>
