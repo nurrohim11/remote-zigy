@@ -237,7 +237,12 @@ public class MainActivity extends AppCompatActivity {
                 ip = service.getHost().getHostAddress();
             }
 
-            final CustomItem itemToAdd = new CustomItem(ip, service.getServiceName().toString(), String.valueOf(service.getPort()),service.getServiceType());
+            final CustomItem itemToAdd = new CustomItem(
+                    ip,
+                    service.getServiceName().toString(),
+                    String.valueOf(service.getPort()),
+                    service.getServiceType());
+
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

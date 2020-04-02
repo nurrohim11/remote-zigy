@@ -2,12 +2,19 @@ package id.net.gmedia.remotezigy;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Context;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -30,13 +37,16 @@ import id.net.gmedia.remotezigy.Utils.SelectedServer;
 import id.net.gmedia.remotezigy.Utils.ServiceUtils;
 
 public class RemoteActivity extends AppCompatActivity {
-    CustomVideoView cvPreview;
+    private static CustomVideoView cvPreview;
     RelativeLayout rlOk, rlMinus, rlPlus;
     ImageView imgPower, imgHome, imgBack, imgTop, imgBottom, imgPrev, imgNext, imgMenu, imgCursor;
     private ItemValidation iv = new ItemValidation();
     private InetAddress hostAddress;
     private int hostPort;
     private final String TAG = "remote";
+    private String link_tv = "";
+    ProgressBar pbLoading;
+    private static double scaleVideo = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +58,7 @@ public class RemoteActivity extends AppCompatActivity {
 
     private void initUi(){
         cvPreview = findViewById(R.id.cv_preview);
+        pbLoading = (ProgressBar) findViewById(R.id.pb_loading);
         imgPower = findViewById(R.id.img_power);
         imgPower.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -230,10 +241,25 @@ public class RemoteActivity extends AppCompatActivity {
 
                 // Thread will wait till server replies
                 String response = dataInputStream.readUTF();
-                if (response != null && response.equals("Connection Accepted")) {
-                    success = true;
+
+                if (response != null ) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        Log.d(">>>>",String.valueOf(jsonObject));
+                        String status = jsonObject.getString("status");
+                        if(status.equals("1")){
+                            success = true;
+                            link_tv = jsonObject.getString("link");
+                            Log.d(">>>>>",link_tv);
+                        }else{
+                            success = false;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                 } else {
-                    success = false;
+                    success =false;
                 }
 
             } catch (IOException e) {
@@ -351,12 +377,30 @@ public class RemoteActivity extends AppCompatActivity {
 
                 // Thread will wait till server replies
                 String response = dataInputStream.readUTF();
-                if (response != null && response.equals("1")) {
-                    success = true;
+                if (response != null ) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        Log.d(">>>>",String.valueOf(jsonObject));
+                        String status = jsonObject.getString("status");
+                        if(status.equals("1")){
+                            success = true;
+                            link_tv = jsonObject.getString("link");
+                        }else{
+                            success = false;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                 } else {
-                    success = false;
-                    linked = true;
+                    success =false;
                 }
+//                if (response != null && response.equals("1")) {
+//                    success = true;
+//                } else {
+//                    success = false;
+//                    linked = true;
+//                }
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -406,6 +450,127 @@ public class RemoteActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!link_tv.equals("")){
+            playVideo(RemoteActivity.this, link_tv);
+        }
+    }
+
+    private void playVideo(final Context context, final String link_tv){
+
+        cvPreview.stopPlayback();
+        cvPreview.clearAnimation();
+        cvPreview.suspend();
+        cvPreview.setVideoURI(null);
+
+        pbLoading.setVisibility(View.VISIBLE);
+
+        if(false){
+
+        }else{
+            cvPreview.setVisibility(View.VISIBLE);
+            if (Looper.myLooper() == null)
+            {
+                Looper.prepare();
+            }
+            new Thread(new Runnable() {
+                public void run() {
+
+                    ((Activity)context).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            try {
+
+                                cvPreview.stopPlayback();
+                                cvPreview.clearAnimation();
+                                cvPreview.suspend();
+                                cvPreview.setVideoURI(null);
+
+                                Uri uri = Uri.parse(link_tv);
+                                // savedChanel.saveLastChanel(nama, url);
+                                cvPreview.setVideoURI(uri);
+                                //vvPlayVideo.setMediaController(mediaController);
+                                cvPreview.requestFocus();
+
+                            } catch (Exception e) {
+                                // NETWORK ERROR such as Timeout
+                                e.printStackTrace();
+
+                                pbLoading.setVisibility(View.GONE);
+                                cvPreview.stopPlayback();
+                                cvPreview.clearAnimation();
+                                cvPreview.suspend();
+                                cvPreview.setVideoURI(null);
+                                Toast.makeText(context, "Channel sudah tidak tersedia", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }
+            }).start();
+
+            cvPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+
+                    pbLoading.setVisibility(View.GONE);
+                    mp.start();
+
+                    fullScreenVideo(context, scaleVideo);
+                    mp.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
+
+                        @Override
+                        public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+
+                            mp.start();
+                            fullScreenVideo(context, scaleVideo);
+                        }
+                    });
+                }
+            });
+
+            cvPreview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                @Override
+                public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
+
+                    pbLoading.setVisibility(View.GONE);
+                    cvPreview.stopPlayback();
+                    cvPreview.clearAnimation();
+                    cvPreview.suspend();
+                    cvPreview.setVideoURI(null);
+                    Toast.makeText(context, "Channel sudah tidak tersedia", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+            });
+
+        }
+    }
+
+    private static void fullScreenVideo(Context context, double scale)
+    {
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        RelativeLayout.LayoutParams params2 = (RelativeLayout.LayoutParams) cvPreview.getLayoutParams();
+
+//        if(isFullScreen){
+//            scale = 1;
+//        }
+        double doubleWidth = metrics.widthPixels * scale;
+        double doubleHeight = metrics.heightPixels * scale;
+        RelativeLayout.LayoutParams newparams = new RelativeLayout.LayoutParams((int) doubleWidth,(int) doubleHeight);
+        newparams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+        newparams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+        newparams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+        newparams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+
+        cvPreview.setLayoutParams(newparams);
+    }
+
 
     @Override
     public void onBackPressed() {
