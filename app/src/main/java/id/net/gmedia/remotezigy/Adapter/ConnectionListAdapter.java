@@ -37,6 +37,7 @@ import id.net.gmedia.remotezigy.RemoteActivity;
 import id.net.gmedia.remotezigy.Utils.ItemValidation;
 import id.net.gmedia.remotezigy.Utils.SelectedServer;
 import id.net.gmedia.remotezigy.Utils.ServiceUtils;
+import id.net.gmedia.remotezigy.Utils.SessionManager;
 import id.net.gmedia.remotezigy.model.CustomItem;
 
 public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAdapter.MyViewHolder> {
@@ -142,6 +143,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
             Log.e(TAG, "Host Address is null");
             return;
         }
+        SessionManager sessionManager = new SessionManager(context);
 
         String ipAddress = getMyIPAddress(true);
         JSONObject jsonData = new JSONObject();
@@ -155,6 +157,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
             jsonData.put("name", item.getItem2());
             jsonData.put("port", item.getItem3());
             jsonData.put("typeconnection", item.getItem4());
+            jsonData.put("fcm_client",sessionManager.getFcmid());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -278,6 +281,7 @@ public class ConnectionListAdapter extends RecyclerView.Adapter<ConnectionListAd
                     SelectedServer.name = jsonData.getString("name");
                     SelectedServer.port = jsonData.getString("port");
                     SelectedServer.type = jsonData.getString("typeconnection");
+                    SelectedServer.fcm_id = jsonData.getString("fcm_client");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

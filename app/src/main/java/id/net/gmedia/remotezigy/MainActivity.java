@@ -14,6 +14,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,6 +36,7 @@ import id.net.gmedia.remotezigy.Adapter.ConnectionListAdapter;
 import id.net.gmedia.remotezigy.Utils.ItemValidation;
 import id.net.gmedia.remotezigy.Utils.SelectedServer;
 import id.net.gmedia.remotezigy.Utils.ServiceUtils;
+import id.net.gmedia.remotezigy.Utils.SessionManager;
 import id.net.gmedia.remotezigy.model.CustomItem;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,17 +44,29 @@ public class MainActivity extends AppCompatActivity {
     private int hostPort;
     private NsdManager mNsdManager;
     private final String TAG = "Client";
+    private final String LOG_TAG = ">>>>>>>>>>";
     private RecyclerView rvListConnection;
     private List<CustomItem> masterList = new ArrayList<>();
     private ItemValidation iv = new ItemValidation();
     private static final String REQUEST_CONNECT_CLIENT = "request-connect-client";
     Toolbar toolbar;
+    String device_token="";
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initUI();
+        sessionManager = new SessionManager(this);
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                device_token = instanceIdResult.getToken();
+                sessionManager.saveFcmId(device_token);
+                Log.d(LOG_TAG,device_token);
+            }
+        });
 
         // NSD Stuff
         mNsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);

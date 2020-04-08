@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">RemoteZigy</string>
+    <string name="app_name">Remote Fiber Stream</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="subscribe_to_news">Subscribe to news</string>
+    <string name="default_notification_channel_name">News</string>
+    <string name="msg_subscribed">Subscribed to product topic</string>
 </resources>

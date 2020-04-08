@@ -14,6 +14,7 @@
         android:layout_height="@dimen/_200sdp"
         android:id="@+id/rl_preview"
         android:layout_alignParentTop="true"
+        android:background="#000"
         android:orientation="horizontal">
 
         <id.net.gmedia.remotezigy.Utils.CustomVideoView
@@ -23,7 +24,19 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="match_parent"/>
+        <LinearLayout
+            android:id="@+id/ll_not_found"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:background="#000"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:orientation="horizontal" />
 
         <ProgressBar
             android:layout_width="wrap_content"
@@ -187,16 +200,17 @@
             android:layout_height="@dimen/_42sdp"
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
-            app:layout_constraintBottom_toBottomOf="@+id/img_lingkaran"
+            app:layout_constraintBottom_toBottomOf="@+id/rl_down"
             app:layout_constraintEnd_toStartOf="@+id/rl_ok"
             app:layout_constraintStart_toStartOf="@+id/img_lingkaran"
             app:layout_constraintTop_toTopOf="@+id/img_lingkaran">
+
             <ImageView
                 android:id="@+id/img_prev"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/prev"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true"
+                android:src="@drawable/prev" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -205,16 +219,17 @@
             android:layout_height="@dimen/_42sdp"
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
-            app:layout_constraintBottom_toBottomOf="@+id/img_lingkaran"
+            app:layout_constraintBottom_toBottomOf="@+id/rl_down"
             app:layout_constraintEnd_toEndOf="@+id/img_lingkaran"
             app:layout_constraintStart_toEndOf="@+id/rl_ok"
             app:layout_constraintTop_toTopOf="@+id/img_lingkaran">
+
             <ImageView
                 android:id="@+id/img_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/next"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true"
+                android:src="@drawable/next" />
         </RelativeLayout>
 
 <!--        <LinearLayout-->

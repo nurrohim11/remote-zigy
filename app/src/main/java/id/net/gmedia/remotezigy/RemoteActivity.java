@@ -18,6 +18,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,37 +39,57 @@ import id.net.gmedia.remotezigy.Utils.CustomVideoView;
 import id.net.gmedia.remotezigy.Utils.ItemValidation;
 import id.net.gmedia.remotezigy.Utils.SelectedServer;
 import id.net.gmedia.remotezigy.Utils.ServiceUtils;
+import id.net.gmedia.remotezigy.Utils.SessionManager;
 
 public class RemoteActivity extends AppCompatActivity {
-    private static CustomVideoView cvPreview;
+    static CustomVideoView cvPreview;
     RelativeLayout rlOk, rlMinus, rlPlus;
     ImageView imgPower, imgHome, imgBack, imgTop, imgBottom, imgPrev, imgNext, imgMenu, imgCursor;
     RelativeLayout rlHome, rlBack, rlUp, rlDown, rlLeft, rlRight;
     private ItemValidation iv = new ItemValidation();
     private InetAddress hostAddress;
     private int hostPort;
-    private final String TAG = "remote";
+    private final String TAG = "remotetesting";
     private String link_tv = "";
-    ProgressBar pbLoading;
+    static ProgressBar pbLoading;
     private static double scaleVideo = 1;
+    SessionManager sessionManager;
+    public static RemoteActivity remoteActivity;
+    private static Context mContext;
+    public static LinearLayout llNoteFound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remote);
+        sessionManager = new SessionManager(RemoteActivity.this);
+        remoteActivity = this;
+        mContext = RemoteActivity.this;
+
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         initUi();
     }
 
+    public static Context getAppContext(){
+        return mContext;
+    }
+
     private void initUi(){
         cvPreview = findViewById(R.id.cv_preview);
+        llNoteFound = findViewById(R.id.ll_not_found);
         pbLoading = (ProgressBar) findViewById(R.id.pb_loading);
         imgPower = findViewById(R.id.img_power);
         imgPower.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 link_tv ="";
-                connectToHost("26");
+//                connectToHost("26");
+                try {
+                    clearConnectedHost();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                finish();
             }
         });
 
@@ -187,14 +211,23 @@ public class RemoteActivity extends AppCompatActivity {
             jsonData.put("ipAddress", ipAddress);
             jsonData.put("keyCode", keyCode);
             jsonData.put("type", "");
+            jsonData.put("fcm_client",SelectedServer.fcm_id);
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e(TAG, "can't put request");
             return;
         }
-        if(!link_tv.equals(""))
-            playVideo(RemoteActivity.this, link_tv);
-
+//        Toast.makeText(this, sessionManager.getLink(), Toast.LENGTH_SHORT).show();
+//        if(!sessionManager.getLink().equals("")){
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    playVideo(RemoteActivity.this, sessionManager.getLink());
+//                }
+//            });
+//        }else{
+//            Log.d(">>>>>>","kosong");
+//        }
         new SocketServerTask().execute(jsonData);
     }
 
@@ -253,20 +286,14 @@ public class RemoteActivity extends AppCompatActivity {
 
                 // Thread will wait till server replies
                 String response = dataInputStream.readUTF();
+//                Log.d("Main a>>>>>",sessionManager.getLink());
 
                 if (response != null ) {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
-                        Log.d(">>>>",String.valueOf(jsonObject));
                         String status = jsonObject.getString("status");
                         if(status.equals("1")){
                             success = true;
-                            link_tv = jsonObject.getString("link");
-                            Log.d(">>>>>",link_tv);
-//                            if(!link_tv.equals("")){
-//                                playVideo(RemoteActivity.this, link_tv);
-//                                Toast.makeText(RemoteActivity.this, link_tv, Toast.LENGTH_SHORT).show();
-//                            }
                         }else{
                             success = false;
                         }
@@ -351,6 +378,7 @@ public class RemoteActivity extends AppCompatActivity {
             jsonData.put("ipAddress", ipAddress);
             jsonData.put("keyCode", "");
             jsonData.put("type", "clear_connection");
+            jsonData.put("fcm_client",SelectedServer.fcm_id);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -459,7 +487,6 @@ public class RemoteActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
 
             if (success) {
-
                 Log.d(TAG, "Clear Connection succes : "+result);
             } else {
                 Log.d(TAG, "Clear Connection failed : "+result);
@@ -472,92 +499,97 @@ public class RemoteActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    private void playVideo(final Context context, final String link_tv){
+    public static void playVideo(final Context context, final String link_tv){
+        Log.d(">>>>>",link_tv);
+        if(!link_tv.equals("empty")){
+            cvPreview.stopPlayback();
+            cvPreview.clearAnimation();
+            cvPreview.suspend();
+            cvPreview.setVideoURI(null);
 
-        cvPreview.stopPlayback();
-        cvPreview.clearAnimation();
-        cvPreview.suspend();
-        cvPreview.setVideoURI(null);
+            RemoteActivity.pbLoading.setVisibility(View.VISIBLE);
 
-        pbLoading.setVisibility(View.VISIBLE);
+            cvPreview.setVisibility(View.VISIBLE);
+            llNoteFound.setVisibility(View.GONE);
+            if (Looper.myLooper() == null)
+            {
+                Looper.prepare();
+            }
+            new Thread(new Runnable() {
+                public void run() {
 
-        cvPreview.setVisibility(View.VISIBLE);
-        if (Looper.myLooper() == null)
-        {
-            Looper.prepare();
-        }
-        new Thread(new Runnable() {
-            public void run() {
+                    ((Activity)context).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
 
-                ((Activity)context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                            try {
 
-                        try {
+                                cvPreview.stopPlayback();
+                                cvPreview.clearAnimation();
+                                cvPreview.suspend();
+                                cvPreview.setVideoURI(null);
 
-                            cvPreview.stopPlayback();
-                            cvPreview.clearAnimation();
-                            cvPreview.suspend();
-                            cvPreview.setVideoURI(null);
+                                Uri uri = Uri.parse(link_tv);
+                                cvPreview.setVideoURI(uri);
+                                //vvPlayVideo.setMediaController(mediaController);
+                                cvPreview.requestFocus();
 
-                            Uri uri = Uri.parse(link_tv);
-//                            Uri uri = Uri.parse("http://stream3.zigy.net/hls/indosiar.m3u8");
-                            // savedChanel.saveLastChanel(nama, url);
-                            cvPreview.setVideoURI(uri);
-                            //vvPlayVideo.setMediaController(mediaController);
-                            cvPreview.requestFocus();
+                            } catch (Exception e) {
+                                // NETWORK ERROR such as Timeout
+                                e.printStackTrace();
 
-                        } catch (Exception e) {
-                            // NETWORK ERROR such as Timeout
-                            e.printStackTrace();
-
-                            pbLoading.setVisibility(View.GONE);
-                            cvPreview.stopPlayback();
-                            cvPreview.clearAnimation();
-                            cvPreview.suspend();
-                            cvPreview.setVideoURI(null);
-                            Toast.makeText(context, "Channel sudah tidak tersedia", Toast.LENGTH_LONG).show();
+                                pbLoading.setVisibility(View.GONE);
+                                cvPreview.stopPlayback();
+                                cvPreview.clearAnimation();
+                                cvPreview.suspend();
+                                cvPreview.setVideoURI(null);
+                                Toast.makeText(context, "Channel sudah tidak tersedia", Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
-                });
-            }
-        }).start();
+                    });
+                }
+            }).start();
 
-        cvPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            cvPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 
-            @Override
-            public void onPrepared(MediaPlayer mp) {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
 
-                pbLoading.setVisibility(View.GONE);
-                mp.start();
+                    pbLoading.setVisibility(View.GONE);
+                    mp.start();
 
-                fullScreenVideo(context, scaleVideo);
-                mp.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
+                    fullScreenVideo(context, scaleVideo);
+                    mp.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
 
-                    @Override
-                    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+                        @Override
+                        public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
 
-                        mp.start();
-                        fullScreenVideo(context, scaleVideo);
-                    }
-                });
-            }
-        });
+                            mp.start();
+                            fullScreenVideo(context, scaleVideo);
+                        }
+                    });
+                }
+            });
 
-        cvPreview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
+            cvPreview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                @Override
+                public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
 
-                pbLoading.setVisibility(View.GONE);
-                cvPreview.stopPlayback();
-                cvPreview.clearAnimation();
-                cvPreview.suspend();
-                cvPreview.setVideoURI(null);
-                Toast.makeText(context, "Channel sudah tidak tersedia", Toast.LENGTH_LONG).show();
-                return true;
-            }
-        });
+                    pbLoading.setVisibility(View.GONE);
+                    cvPreview.stopPlayback();
+                    cvPreview.clearAnimation();
+                    cvPreview.suspend();
+                    cvPreview.setVideoURI(null);
+                    Toast.makeText(context, "Channel sudah tidak tersedia", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+            });
 
+        }else{
+            RemoteActivity.pbLoading.setVisibility(View.GONE);
+            cvPreview.setVisibility(View.GONE);
+            llNoteFound.setVisibility(View.VISIBLE);
+        }
     }
 
     private static void fullScreenVideo(Context context, double scale)
