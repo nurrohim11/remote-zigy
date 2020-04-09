@@ -1,4 +1,4 @@
-package id.net.gmedia.remotezigy;
+package id.net.gmedia.remotezigy.receivertv;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,10 +18,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,6 +31,7 @@ import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
 
+import id.net.gmedia.remotezigy.R;
 import id.net.gmedia.remotezigy.Utils.CustomVideoView;
 import id.net.gmedia.remotezigy.Utils.ItemValidation;
 import id.net.gmedia.remotezigy.Utils.SelectedServer;

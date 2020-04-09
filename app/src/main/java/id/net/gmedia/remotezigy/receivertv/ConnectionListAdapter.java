@@ -1,4 +1,4 @@
-package id.net.gmedia.remotezigy.Adapter;
+package id.net.gmedia.remotezigy.receivertv;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -32,8 +31,6 @@ import java.util.Collections;
 import java.util.List;
 
 import id.net.gmedia.remotezigy.R;
-import id.net.gmedia.remotezigy.MainActivity;
-import id.net.gmedia.remotezigy.RemoteActivity;
 import id.net.gmedia.remotezigy.Utils.ItemValidation;
 import id.net.gmedia.remotezigy.Utils.SelectedServer;
 import id.net.gmedia.remotezigy.Utils.ServiceUtils;

@@ -8,4 +8,5 @@
 
     <dimen name="navigation_size">50dp</dimen>
     <dimen name="navigation_size_big">60dp</dimen>
+    <dimen name="padding_channel">6dp</dimen>
 </resources>

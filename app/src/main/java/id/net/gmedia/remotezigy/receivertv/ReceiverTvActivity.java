@@ -1,4 +1,4 @@
-package id.net.gmedia.remotezigy;
+package id.net.gmedia.remotezigy.receivertv;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -32,14 +32,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import id.net.gmedia.remotezigy.Adapter.ConnectionListAdapter;
+import id.net.gmedia.remotezigy.R;
 import id.net.gmedia.remotezigy.Utils.ItemValidation;
 import id.net.gmedia.remotezigy.Utils.SelectedServer;
 import id.net.gmedia.remotezigy.Utils.ServiceUtils;
 import id.net.gmedia.remotezigy.Utils.SessionManager;
 import id.net.gmedia.remotezigy.model.CustomItem;
 
-public class MainActivity extends AppCompatActivity {
+public class ReceiverTvActivity extends AppCompatActivity {
     private InetAddress hostAddress;
     private int hostPort;
     private NsdManager mNsdManager;
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_receiver_tv);
         initUI();
         sessionManager = new SessionManager(this);
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
@@ -91,9 +91,9 @@ public class MainActivity extends AppCompatActivity {
 
         if(listItem != null){
 
-            final ConnectionListAdapter menuAdapter = new ConnectionListAdapter(MainActivity.this, listItem);
+            final ConnectionListAdapter menuAdapter = new ConnectionListAdapter(ReceiverTvActivity.this, listItem);
 
-            final RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(MainActivity.this, 1);
+            final RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(ReceiverTvActivity.this, 1);
             rvListConnection.setLayoutManager(mLayoutManager);
             rvListConnection.setItemAnimator(new DefaultItemAnimator());
             rvListConnection.setAdapter(menuAdapter);
@@ -404,9 +404,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             if (success) {
-                Toast.makeText(MainActivity.this, "Connection Done", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ReceiverTvActivity.this, "Connection Done", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(MainActivity.this, "Unable to connect", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ReceiverTvActivity.this, "Unable to connect", Toast.LENGTH_SHORT).show();
             }
         }
     }
