@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 
 import id.net.gmedia.remotezigy.R;
 import id.net.gmedia.remotezigy.Utils.CustomVideoView;
-import id.net.gmedia.remotezigy.channel.ChannelModel;
+import id.net.gmedia.remotezigy.tv.ChannelModel;
 
 public class PlayActivity extends AppCompatActivity {
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#C6000000"
-    tools:context=".channel.ChannelActivity">
+    tools:context=".tv.ChannelActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"

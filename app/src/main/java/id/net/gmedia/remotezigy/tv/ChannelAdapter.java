@@ -1,4 +1,4 @@
-package id.net.gmedia.remotezigy.channel;
+package id.net.gmedia.remotezigy.tv;
 
 import android.content.Context;
 import android.content.Intent;

@@ -2,21 +2,14 @@ package id.net.gmedia.remotezigy.main;
 
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -25,10 +18,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.view.Menu;
-
 import id.net.gmedia.remotezigy.R;
-import id.net.gmedia.remotezigy.channel.HomeFragment;
+import id.net.gmedia.remotezigy.streaming.StreamingFragment;
+import id.net.gmedia.remotezigy.tv.TvFragment;
+import id.net.gmedia.remotezigy.home.HomeFragment;
 import id.net.gmedia.remotezigy.receivertv.ReceiverFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -61,12 +54,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -75,15 +62,6 @@ public class MainActivity extends AppCompatActivity
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -102,6 +80,14 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_receiver:
                 fragment = new ReceiverFragment();
                 toolbar.setTitle("Remote TV");
+                break;
+            case R.id.nav_tv:
+                fragment = new TvFragment();
+                toolbar.setTitle("Channel TV");
+                break;
+            case R.id.nav_live:
+                fragment = new StreamingFragment();
+                toolbar.setTitle("Streaming Apps");
                 break;
         }
 

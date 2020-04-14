@@ -1,4 +1,4 @@
-package id.net.gmedia.remotezigy.channel;
+package id.net.gmedia.remotezigy.tv;
 
 public class ChannelModel {
     String id, icon, nama, link;

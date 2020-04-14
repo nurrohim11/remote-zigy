@@ -1,4 +1,4 @@
-package id.net.gmedia.remotezigy.channel;
+package id.net.gmedia.remotezigy.streaming;
 
 
 import android.content.res.Resources;
@@ -27,18 +27,21 @@ import co.id.gmedia.coremodul.ApiVolley;
 import co.id.gmedia.coremodul.AppRequestCallback;
 import id.net.gmedia.remotezigy.R;
 import id.net.gmedia.remotezigy.Utils.Url;
+import id.net.gmedia.remotezigy.tv.ChannelAdapter;
+import id.net.gmedia.remotezigy.tv.ChannelModel;
+import id.net.gmedia.remotezigy.tv.TvFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment {
+public class StreamingFragment extends Fragment {
 
+    List<StreamingModel> model = new ArrayList<>();
     View view;
-    RecyclerView rvChannel;
-    List<ChannelModel> channelModels = new ArrayList<>();
-    ChannelAdapter adapter;
+    StreamingAdapter adapter;
+    RecyclerView rvStreaming;
 
-    public HomeFragment() {
+    public StreamingFragment() {
         // Required empty public constructor
     }
 
@@ -47,48 +50,45 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_home, container, false);
+        view = inflater.inflate(R.layout.fragment_streaming, container, false);
+        rvStreaming = view.findViewById(R.id.rv_streaming);
 
-        initUi();
+        adapter = new StreamingAdapter(getContext(), model);
 
-        adapter = new ChannelAdapter(getContext(), channelModels);
-
-//        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(),3);
-//        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL); // set Horizontal Orientation
         RecyclerView.LayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
-        rvChannel.setLayoutManager(gridLayoutManager);
-        rvChannel.addItemDecoration(new GridSpacingItemDecoration(3, dpToPx(10), true));
-        rvChannel.setItemAnimator(new DefaultItemAnimator());
-        rvChannel.setAdapter(adapter);
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding_channel);
-        rvChannel.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
-        getListChannel();
-        return view;
+        rvStreaming.setLayoutManager(gridLayoutManager);
+//        rvStreaming.addItemDecoration(new GridSpacingItemDecoration(3, dpToPx(10), true));
+//        rvStreaming.setItemAnimator(new DefaultItemAnimator());
+        rvStreaming.setAdapter(adapter);
+//        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding_channel);
+//        rvStreaming.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
+        getListStreaming();
+        return  view;
     }
 
-    private void initUi(){
-        rvChannel = view.findViewById(R.id.rv_channel);
-    }
-
-    private void getListChannel() {
+    private void getListStreaming() {
         JSONObject jbody = new JSONObject();
 
-        new ApiVolley(getContext(), jbody, "GET", Url.url_channel,
+        new ApiVolley(getContext(), jbody, "POST", Url.url_streaming,
                 new AppRequestCallback(new AppRequestCallback.ResponseListener() {
                     @Override
                     public void onSuccess(String response, String message) {
-                        channelModels.clear();
+                        model.clear();
                         try{
                             JSONArray obj = new JSONArray(response);
                             for(int i = 0; i < obj.length(); i++){
                                 JSONObject j = obj.getJSONObject(i);
-                                ChannelModel m = new ChannelModel(
+                                StreamingModel m = new StreamingModel(
                                         j.getString("id"),
+                                        j.getString("title"),
                                         j.getString("icon"),
-                                        j.getString("nama"),
-                                        j.getString("link")
+                                        j.getString("url"),
+                                        j.getString("kategori"),
+                                        j.getString("package"),
+                                        j.getString("url_playstore"),
+                                        j.getString("url_web")
                                 );
-                                channelModels.add(m);
+                                model.add(m);
                             }
                             adapter.notifyDataSetChanged();
                         }
@@ -99,7 +99,7 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onEmpty(String message) {
 
-                        channelModels.clear();
+                        model.clear();
                         adapter.notifyDataSetChanged();
 
                     }
