@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,18 +33,22 @@ import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
 
+import co.id.gmedia.coremodul.ApiVolley;
+import co.id.gmedia.coremodul.AppRequestCallback;
 import id.net.gmedia.remotezigy.R;
 import id.net.gmedia.remotezigy.Utils.CustomVideoView;
 import id.net.gmedia.remotezigy.Utils.ItemValidation;
 import id.net.gmedia.remotezigy.Utils.SelectedServer;
 import id.net.gmedia.remotezigy.Utils.ServiceUtils;
 import id.net.gmedia.remotezigy.Utils.SessionManager;
+import id.net.gmedia.remotezigy.Utils.Url;
+import id.net.gmedia.remotezigy.streaming.StreamingModel;
 
 public class RemoteActivity extends AppCompatActivity {
     static CustomVideoView cvPreview;
     RelativeLayout rlOk, rlMinus, rlPlus;
     ImageView imgPower, imgHome, imgBack, imgTop, imgBottom, imgPrev, imgNext, imgMenu, imgCursor;
-    RelativeLayout rlHome, rlBack, rlUp, rlDown, rlLeft, rlRight;
+    RelativeLayout rlHome, rlBack, rlUp, rlDown, rlLeft, rlRight, rlDevice;
     private ItemValidation iv = new ItemValidation();
     private InetAddress hostAddress;
     private int hostPort;
@@ -55,6 +60,7 @@ public class RemoteActivity extends AppCompatActivity {
     public static RemoteActivity remoteActivity;
     private static Context mContext;
     public static LinearLayout llNoteFound;
+    private boolean success;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +80,7 @@ public class RemoteActivity extends AppCompatActivity {
 
     private void initUi(){
         cvPreview = findViewById(R.id.cv_preview);
-        llNoteFound = findViewById(R.id.ll_not_found);
+//        llNoteFound = findViewById(R.id.ll_not_found);
         pbLoading = (ProgressBar) findViewById(R.id.pb_loading);
         imgPower = findViewById(R.id.img_power);
         imgPower.setOnClickListener(new View.OnClickListener() {
@@ -116,6 +122,7 @@ public class RemoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 connectToHost("23");
+//                connectToHost("66");
             }
         });
 
@@ -152,6 +159,14 @@ public class RemoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 connectToHost("22");
+            }
+        });
+
+        rlDevice = findViewById(R.id.rl_device);
+        rlDevice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                connectToHost("61");
             }
         });
 
@@ -215,17 +230,6 @@ public class RemoteActivity extends AppCompatActivity {
             Log.e(TAG, "can't put request");
             return;
         }
-//        Toast.makeText(this, sessionManager.getLink(), Toast.LENGTH_SHORT).show();
-//        if(!sessionManager.getLink().equals("")){
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    playVideo(RemoteActivity.this, sessionManager.getLink());
-//                }
-//            });
-//        }else{
-//            Log.d(">>>>>>","kosong");
-//        }
         new SocketServerTask().execute(jsonData);
     }
 
@@ -256,7 +260,6 @@ public class RemoteActivity extends AppCompatActivity {
 
     private class SocketServerTask extends AsyncTask<JSONObject, Void, Void> {
         private JSONObject jsonData;
-        private boolean success;
 
         @Override
         protected Void doInBackground(JSONObject... params) {
@@ -437,13 +440,6 @@ public class RemoteActivity extends AppCompatActivity {
                 } else {
                     success =false;
                 }
-//                if (response != null && response.equals("1")) {
-//                    success = true;
-//                } else {
-//                    success = false;
-//                    linked = true;
-//                }
-
             } catch (IOException e) {
                 e.printStackTrace();
                 success = false;
@@ -498,7 +494,6 @@ public class RemoteActivity extends AppCompatActivity {
     }
 
     public static void playVideo(final Context context, final String link_tv){
-        Log.d(">>>>>",link_tv);
         if(!link_tv.equals("empty")){
             cvPreview.stopPlayback();
             cvPreview.clearAnimation();
@@ -508,7 +503,6 @@ public class RemoteActivity extends AppCompatActivity {
             RemoteActivity.pbLoading.setVisibility(View.VISIBLE);
 
             cvPreview.setVisibility(View.VISIBLE);
-            llNoteFound.setVisibility(View.GONE);
             if (Looper.myLooper() == null)
             {
                 Looper.prepare();
@@ -586,7 +580,6 @@ public class RemoteActivity extends AppCompatActivity {
         }else{
             RemoteActivity.pbLoading.setVisibility(View.GONE);
             cvPreview.setVisibility(View.GONE);
-            llNoteFound.setVisibility(View.VISIBLE);
         }
     }
 
@@ -597,9 +590,6 @@ public class RemoteActivity extends AppCompatActivity {
         ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
         RelativeLayout.LayoutParams params2 = (RelativeLayout.LayoutParams) cvPreview.getLayoutParams();
 
-//        if(isFullScreen){
-//            scale = 1;
-//        }
         double doubleWidth = metrics.widthPixels * scale;
         double doubleHeight = metrics.heightPixels * scale;
         RelativeLayout.LayoutParams newparams = new RelativeLayout.LayoutParams((int) doubleWidth,(int) doubleHeight);
@@ -610,7 +600,6 @@ public class RemoteActivity extends AppCompatActivity {
 
         cvPreview.setLayoutParams(newparams);
     }
-
 
     @Override
     public void onBackPressed() {

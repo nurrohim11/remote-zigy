@@ -24,6 +24,7 @@ public class SessionManager {
     // All Shared Preferences Keys
     public static final String TAG_LINK = "link";
     public static final String TAG_FCMID ="fcm_id";
+    public static final String TAG_COUNT_SLIDER = "count_slider";
 
     // Constructor
     public SessionManager(Context context){
@@ -37,6 +38,11 @@ public class SessionManager {
         editor.putString(TAG_FCMID, fcm_id);
 
         // commit changes
+        editor.commit();
+    }
+
+    public void saveCountSlider(int count_slider){
+        editor.putInt(TAG_COUNT_SLIDER,count_slider);
         editor.commit();
     }
 
@@ -56,4 +62,7 @@ public class SessionManager {
         return pref.getString(TAG_FCMID, "");
     }
 
+    public int getCountSlider(){
+        return pref.getInt(TAG_COUNT_SLIDER, 0);
+    }
 }
