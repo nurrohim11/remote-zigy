@@ -6,11 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -41,15 +43,15 @@ public class ChannelAdapter  extends RecyclerView.Adapter<ChannelAdapter.MyViewH
     @Override
     public void onBindViewHolder(@NonNull final ChannelAdapter.MyViewHolder holder, int position) {
         final ChannelModel m = channelModels.get(position);
-
         Glide.with(context)
                 .load(m.getIcon())
 //                .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                .override(500, 500)
-//                .centerCrop()
-//                .apply(RequestOptions.circleCropTransform())
+                .placeholder(R.drawable.placeholder)
+//                .override(400, 400)
+                .centerCrop()
                 .transform(new RoundedCornersTransformation(30,0))
                 .into(holder.imgChannel);
+        holder.tvTitle.setText(m.getNama());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,9 +71,11 @@ public class ChannelAdapter  extends RecyclerView.Adapter<ChannelAdapter.MyViewH
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView imgChannel;
+        public TextView tvTitle;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             imgChannel = itemView.findViewById(R.id.img_channel);
+            tvTitle = itemView.findViewById(R.id.tv_title);
         }
     }
 }

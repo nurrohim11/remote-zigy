@@ -9,13 +9,13 @@
             android:icon="@drawable/ic_home"
             android:title="Home"/>
         <item
-            android:id="@+id/nav_tv"
-            android:icon="@drawable/ic_tv"
-            android:title="TV Streaming" />
-        <item
             android:id="@+id/nav_live"
             android:icon="@drawable/ic_live"
             android:title="Live Streaming" />
+        <item
+            android:id="@+id/nav_tv"
+            android:icon="@drawable/ic_tv"
+            android:title="TV" />
         <item
             android:id="@+id/nav_receiver"
             android:icon="@drawable/ic_remote"

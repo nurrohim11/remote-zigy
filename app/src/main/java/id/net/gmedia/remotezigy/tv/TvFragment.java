@@ -50,7 +50,6 @@ public class TvFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        setHasOptionsMenu(true);
         view = inflater.inflate(R.layout.fragment_tv, container, false);
 
         initUi();
@@ -59,8 +58,6 @@ public class TvFragment extends Fragment {
 
         RecyclerView.LayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         rvChannel.setLayoutManager(gridLayoutManager);
-        rvChannel.addItemDecoration(new GridSpacingItemDecoration(3, dpToPx(10), true));
-        rvChannel.setItemAnimator(new DefaultItemAnimator());
         rvChannel.setAdapter(adapter);
         getListChannel();
         return view;
@@ -68,12 +65,6 @@ public class TvFragment extends Fragment {
 
     private void initUi(){
         rvChannel = view.findViewById(R.id.rv_channel);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.main, menu);
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     private void getListChannel() {

@@ -57,11 +57,7 @@ public class StreamingFragment extends Fragment {
 
         RecyclerView.LayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         rvStreaming.setLayoutManager(gridLayoutManager);
-//        rvStreaming.addItemDecoration(new GridSpacingItemDecoration(3, dpToPx(10), true));
-//        rvStreaming.setItemAnimator(new DefaultItemAnimator());
         rvStreaming.setAdapter(adapter);
-//        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.padding_channel);
-//        rvStreaming.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
         getListStreaming();
         return  view;
     }
